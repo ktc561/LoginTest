@@ -43,6 +43,7 @@ struct LoginEmailScreen: View {
             .padding()
             VStack(spacing: 15){
                 Button(action: {
+                    //sign in auth
                     self.userInfo.isUserAuth = .signedIn
                 }, label: {
                     Text("Login")

@@ -14,6 +14,14 @@ enum FBRefManager {
     
     static let db = Firestore.firestore()
     static let root = db.collection(rootEnvPath).document(rootEnvPath)
+
     
+    static func refForUserPubData(uid: String) -> DocumentReference {
+        return root
+            .collection(FBKeys.CollectionPath.users)
+            .document(uid)
+            .collection(FBKeys.CollectionPath.publicData)
+            .document(FBKeys.CollectionPath.publicData)
+    }
     
 }

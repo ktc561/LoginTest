@@ -12,10 +12,11 @@ struct SignUpScreen: View {
     @Environment(\.presentationMode) var presenationMode
     // verify email logic w view model
     @State var uemail = ""
+    @State var firName = ""
     var body: some View {
         NavigationView {
             VStack(spacing: 42) {
-                TextField("Full Name", text: $uemail).disableAutocorrection(true).keyboardType(.emailAddress)
+                TextField("Full Name", text: $firName).disableAutocorrection(true).keyboardType(.emailAddress)
                     .padding()
                     .frame(height: 50)
                     .background(Color(UIColor.secondarySystemBackground))
@@ -44,9 +45,11 @@ struct SignUpScreen: View {
                 ]
                 
                 Button(action: {
+                    
+                    // create user
                     FBRefManager
                         .root
-                        .collection("cities")
+                        .collection(FBKeys.CollectionPath.cities)
                         .document("LA")
                         .setData(cityData, merge: true) { (err) in
                             if let err = err {
@@ -54,6 +57,29 @@ struct SignUpScreen: View {
                             }
                             print("Successfully set and merged new data set")
                         }
+                    
+                    
+                    let ref =
+                        FBRefManager.root.collection(FBKeys.CollectionPath.users).document()
+                    
+                    let   uid = ref.documentID
+                    
+                    let FBname = firName
+                    
+                    let userData = [
+                        "uid" : uid,
+                        "name" : FBname
+                        
+                    ] 
+                    
+                    FBRefManager.refForUserPubData(uid: uid).setData(userData, merge: true) { (err) in
+                        if let err = err {
+                            print(err.localizedDescription)
+                        }
+                        print("Successfully set and merged user data")
+                    }
+                    
+                    
                 }, label: {
                     Text("Register")
                         .frame(width: 200)
